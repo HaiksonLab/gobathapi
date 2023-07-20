@@ -30,6 +30,7 @@ const GobathApi = PhantomFetcher<Config, Root>(Events, (options, path, body, que
                     url,
                     data: body,
                     headers: body.getHeaders? body.getHeaders() : {'Content-Type': 'multipart/form-data'},
+                    withCredentials: true,
                     maxContentLength: Infinity,
                     maxBodyLength: Infinity,
                     onUploadProgress: (event) => options.onProgress && options.onProgress((event.loaded * 100) / event.total, event),
@@ -42,7 +43,7 @@ const GobathApi = PhantomFetcher<Config, Root>(Events, (options, path, body, que
                     body,
                     query,
                     {},
-                    options
+                    {...options, fetch_options: {credentials: "include"}}
                 );
                 contentType = resp.headers.get('content-type');
             }
