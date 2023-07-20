@@ -16,7 +16,7 @@ class GobathApiCommunicationError extends GobathApiError {}
 
 const GobathApi = PhantomFetcher<Config, Root>(Events, (options, path, body, query) => {
     const method      = path.at(-1);
-    const url         = `https://api.gobath.ru/${path.slice(0, -1).join('/').toLowerCase()}`;
+    const url         = `https://api.gobath.ru/${path.slice(0, -1).join('/').replace(/[A-Z]/g, l => `-${l.toLowerCase()}`).replace(/(^|[^a-z])-/g, '$1')}`; // CamelCase to snake-case, CAMELcase not allowed.
     const requestName = (typeof options.preventParallel == 'string') ? options.preventParallel : `${method} ${url}`;
 
     return AsyncParallelismControl(requestName, !!options.preventParallel, requestsQueue, async () => {
@@ -209,6 +209,14 @@ interface Root<ConfigT = Config> {
                 GET: NoData<ConfigT, { note: string }>
             }
         }
+        ProfileDeleteAccess: {
+            Email: {
+                GET: NoData<ConfigT, { note: string }>
+            }
+            Phone: {
+                GET: NoData<ConfigT, { note: string }>
+            }
+        }
         ProfileEmail: {
             Email: {
                 GET: QuerRe<ConfigT,
@@ -306,9 +314,16 @@ interface Root<ConfigT = Config> {
             {
                 /***
                  * @description
-                 * Current password, or empty if user has no password installed.
+                 * The user password.
+                 * Required - if user has password.
                  */
                 password?: string
+                /***
+                 * @description
+                 * Confirmation code requested with `/confirmation/profile-delete-access` and received by owner.
+                 * Required - if user has no password but has email or phone.
+                 */
+                code?: string
             },
             {
                 note: string
@@ -392,7 +407,7 @@ interface Root<ConfigT = Config> {
                 }
             >
         }
-        SSO: {
+        Sso: {
             Yandex: {
                 LINK:   NoData<ConfigT, {
                     /***

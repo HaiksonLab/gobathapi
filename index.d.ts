@@ -142,6 +142,18 @@ interface Root<ConfigT = Config> {
                 }>;
             };
         };
+        ProfileDeleteAccess: {
+            Email: {
+                GET: NoData<ConfigT, {
+                    note: string;
+                }>;
+            };
+            Phone: {
+                GET: NoData<ConfigT, {
+                    note: string;
+                }>;
+            };
+        };
         ProfileEmail: {
             Email: {
                 GET: QuerRe<ConfigT, {
@@ -222,9 +234,16 @@ interface Root<ConfigT = Config> {
         DELETE: BodyRe<ConfigT, {
             /***
              * @description
-             * Current password, or empty if user has no password installed.
+             * The user password.
+             * Required - if user has password.
              */
             password?: string;
+            /***
+             * @description
+             * Confirmation code requested with `/confirmation/profile-delete-access` and received by owner.
+             * Required - if user has no password but has email or phone.
+             */
+            code?: string;
         }, {
             note: string;
         }>;
@@ -294,7 +313,7 @@ interface Root<ConfigT = Config> {
                 note: string;
             }>;
         };
-        SSO: {
+        Sso: {
             Yandex: {
                 LINK: NoData<ConfigT, {
                     /***

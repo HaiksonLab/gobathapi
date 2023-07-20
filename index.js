@@ -100,7 +100,7 @@ var GobathApiCommunicationError = /** @class */ (function (_super) {
 exports.GobathApiCommunicationError = GobathApiCommunicationError;
 var GobathApi = (0, phantomfetcher_1.PhantomFetcher)(Events, function (options, path, body, query) {
     var method = path.at(-1);
-    var url = "https://api.gobath.ru/".concat(path.slice(0, -1).join('/').toLowerCase());
+    var url = "https://api.gobath.ru/".concat(path.slice(0, -1).join('/').replace(/[A-Z]/g, function (l) { return "-".concat(l.toLowerCase()); }).replace(/(^|[^a-z])-/g, '$1')); // CamelCase to snake-case, CAMELcase not allowed.
     var requestName = (typeof options.preventParallel == 'string') ? options.preventParallel : "".concat(method, " ").concat(url);
     return (0, phantomfetcher_1.AsyncParallelismControl)(requestName, !!options.preventParallel, requestsQueue, function () { return __awaiter(void 0, void 0, void 0, function () {
         var resp, contentType, err_1, _a, data, error, _b, code, message, fields;
