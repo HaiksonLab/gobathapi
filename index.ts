@@ -267,6 +267,27 @@ interface Root<ConfigT = Config> {
                 >
             }
         }
+        VerifyCode: {
+            GET: QuerRe<ConfigT,
+                {
+                    /***
+                     * @description
+                     * The `code_id` from `/confirmation/* /*` request.
+                     * Required.
+                     */
+                    code_id: string,
+                    /***
+                     * @description
+                     * The received code requested with `/confirmation/* /*`.
+                     * Required.
+                     */
+                    code: string
+                },
+                {
+                    valid: boolean
+                }
+            >
+        }
     },
     Profile: {
         GET:   NoData<ConfigT,
