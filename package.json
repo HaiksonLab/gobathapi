@@ -1,0 +1,17 @@
+{
+  "name": "gobathapi",
+  "version": "1.0.0",
+  "description": "GoBath.ru Javascript SDK",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "author": "Hayk Marukyan (Haikson)",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "phantomfetcher": "https://github.com/HaiksonLab/phantomfetcher.git"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/node": "^20.4.2"
+  }
+}
