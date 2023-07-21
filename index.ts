@@ -197,26 +197,26 @@ interface Root<ConfigT = Config> {
     Confirmation: {
         EmailChangeAccess: {
             Email: {
-                GET: NoData<ConfigT, { note: string }>
+                GET: NoData<ConfigT, { note: string, code_id: string }>
             }
             Phone: {
-                GET: NoData<ConfigT, { note: string }>
+                GET: NoData<ConfigT, { note: string, code_id: string }>
             }
         }
         PhoneChangeAccess: {
             Email: {
-                GET: NoData<ConfigT, { note: string }>
+                GET: NoData<ConfigT, { note: string, code_id: string }>
             }
             Phone: {
-                GET: NoData<ConfigT, { note: string }>
+                GET: NoData<ConfigT, { note: string, code_id: string }>
             }
         }
         ProfileDeleteAccess: {
             Email: {
-                GET: NoData<ConfigT, { note: string }>
+                GET: NoData<ConfigT, { note: string, code_id: string }>
             }
             Phone: {
-                GET: NoData<ConfigT, { note: string }>
+                GET: NoData<ConfigT, { note: string, code_id: string }>
             }
         }
         ProfileEmail: {
@@ -240,6 +240,7 @@ interface Root<ConfigT = Config> {
                     },
                     {
                         note: string
+                        code_id: string
                     }
                 >
             }
@@ -265,6 +266,7 @@ interface Root<ConfigT = Config> {
                     },
                     {
                         note: string
+                        code_id: string
                     }
                 >
             }

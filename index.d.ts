@@ -123,11 +123,13 @@ interface Root<ConfigT = Config> {
             Email: {
                 GET: NoData<ConfigT, {
                     note: string;
+                    code_id: string;
                 }>;
             };
             Phone: {
                 GET: NoData<ConfigT, {
                     note: string;
+                    code_id: string;
                 }>;
             };
         };
@@ -135,11 +137,13 @@ interface Root<ConfigT = Config> {
             Email: {
                 GET: NoData<ConfigT, {
                     note: string;
+                    code_id: string;
                 }>;
             };
             Phone: {
                 GET: NoData<ConfigT, {
                     note: string;
+                    code_id: string;
                 }>;
             };
         };
@@ -147,11 +151,13 @@ interface Root<ConfigT = Config> {
             Email: {
                 GET: NoData<ConfigT, {
                     note: string;
+                    code_id: string;
                 }>;
             };
             Phone: {
                 GET: NoData<ConfigT, {
                     note: string;
+                    code_id: string;
                 }>;
             };
         };
@@ -174,6 +180,7 @@ interface Root<ConfigT = Config> {
                     };
                 }, {
                     note: string;
+                    code_id: string;
                 }>;
             };
         };
@@ -196,6 +203,7 @@ interface Root<ConfigT = Config> {
                     };
                 }, {
                     note: string;
+                    code_id: string;
                 }>;
             };
         };
