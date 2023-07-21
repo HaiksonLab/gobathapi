@@ -65,11 +65,12 @@ interface Root<ConfigT = Config> {
                 destination: string;
                 /***
                  * @description
-                 * `authorization` - by default.
-                 * `password_reset` - to reset password after confirmation.
-                 * Optional.
+                 * `registration`   - will throw error if user already exists.
+                 * `authorization`  - will throw error if user does not exist.
+                 * `password_reset` - will throw error if user does not exist.
+                 * Required.
                  */
-                purpose?: "authorization" | "password_reset";
+                purpose: "registration" | "authorization" | "password_reset";
                 /***
                  * @description
                  * Received confirmation code.
