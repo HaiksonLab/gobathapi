@@ -17,13 +17,13 @@ interface Config {
     token?: string;
     preventParallel?: boolean | string;
 }
-interface AuthorizedResponse {
+type PostMessageHTML = string;
+export interface AuthorizedResponse {
     auth_id: string;
     user_id: number;
     note: string;
 }
-type PostMessageHTML = string;
-interface FileWithVariants<VariantsT = string, MetaT = object> {
+export interface FileWithVariants<VariantsT = string, MetaT = object> {
     id: string;
     ext: string;
     mimetype: string;
@@ -36,7 +36,7 @@ interface FileWithVariants<VariantsT = string, MetaT = object> {
         [key: VariantsT]: FileWithVariants;
     };
 }
-interface AuthMagickLinkParams {
+export interface AuthMagickLinkParams {
     /***
      * @description
      * in case `phone` will send short confirmation code.
@@ -65,7 +65,7 @@ interface AuthMagickLinkParams {
      */
     code?: number | string;
 }
-interface AuthPasswordParams {
+export interface AuthPasswordParams {
     /***
      * @description
      * Phone (e164 format with/out +) or email.
@@ -79,7 +79,7 @@ interface AuthPasswordParams {
      */
     password: string;
 }
-interface ProfileData {
+export interface ProfileData {
     user_id: number;
     name: string;
     phone: string | null;
@@ -525,12 +525,12 @@ interface Root<ConfigT = Config> {
         };
     };
 }
-interface GetBusinessResponse {
+export interface GetBusinessResponse {
     business_id: number;
     name: string;
     requisites: RequisitesPublicInfo;
 }
-interface RequisitesPublicInfo {
+export interface RequisitesPublicInfo {
     main: null | {
         name: string;
         short_name: string;
@@ -569,7 +569,7 @@ interface RequisitesPublicInfo {
         email: string | null;
     };
 }
-interface PersonPassport {
+export interface PersonPassport {
     country: "RUS";
     firstname: string;
     lastname: string;
@@ -583,7 +583,7 @@ interface PersonPassport {
     passport_issued_date: string;
     passport_division_code: string;
 }
-interface RequisitesPersonParams {
+export interface RequisitesPersonParams {
     /***
      * @description
      * Country code.
@@ -664,7 +664,7 @@ interface RequisitesPersonParams {
      */
     reg_address: string;
 }
-interface RequisitesSelfbusyParams {
+export interface RequisitesSelfbusyParams {
     /***
      * @description
      * Full name.
@@ -684,7 +684,7 @@ interface RequisitesSelfbusyParams {
      */
     reg_address: string;
 }
-interface RequisitesIndividualParams {
+export interface RequisitesIndividualParams {
     /***
      * @description
      * Individual entrepreneur's INN.
@@ -705,7 +705,7 @@ interface RequisitesIndividualParams {
      */
     fact_address?: string;
 }
-interface RequisitesLegalParams {
+export interface RequisitesLegalParams {
     /***
      * @description
      * Organization INN.
@@ -726,7 +726,7 @@ interface RequisitesLegalParams {
      */
     fact_address?: string;
 }
-interface RequisitesBankParams {
+export interface RequisitesBankParams {
     /***
      * @description
      * The BIC of bank.
@@ -740,7 +740,7 @@ interface RequisitesBankParams {
      */
     account: string | number;
 }
-interface RequisitesContactsParams {
+export interface RequisitesContactsParams {
     /***
      * @description
      * Name of the contact person.
