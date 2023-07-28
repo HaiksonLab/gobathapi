@@ -52,18 +52,18 @@ const GobathApi = PhantomFetcher<Config, Root>(Events, (options, path, body, que
         }
 
         if (contentType?.startsWith('application/json')) {
-            const {data, error} = resp.data || await resp.json();
+            const {data, meta, error} = resp.data || await resp.json();
 
             if (error) {
                 const {code, message, ...fields} = error;
                 throw new GobathApiError(code, message, fields);
             }
 
-            if (data.meta) {
-                data.data.$meta = meta;
+            if (meta) {
+                data.$meta = meta;
             }
 
-            return data.data;
+            return data;
         } else {
             return await resp.text();
         }

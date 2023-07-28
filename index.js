@@ -114,7 +114,7 @@ var GobathApi = (0, phantomfetcher_1.PhantomFetcher)(Events, function (options, 
     var url = "https://api.gobath.ru/".concat(path.slice(0, -1).join('/').replace(/[A-Z]/g, function (l) { return "-".concat(l.toLowerCase()); }).replace(/(^|[^a-z])-/g, '$1')); // CamelCase to snake-case, CAMELcase not allowed.
     var requestName = (typeof options.preventParallel == 'string') ? options.preventParallel : "".concat(method, " ").concat(url);
     return (0, phantomfetcher_1.AsyncParallelismControl)(requestName, !!options.preventParallel, requestsQueue, function () { return __awaiter(void 0, void 0, void 0, function () {
-        var resp, contentType, err_1, _a, data, error, _b, code, message, fields;
+        var resp, contentType, err_1, _a, data, meta, error, _b, code, message, fields;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -152,15 +152,15 @@ var GobathApi = (0, phantomfetcher_1.PhantomFetcher)(Events, function (options, 
                     _b = (_c.sent());
                     _c.label = 8;
                 case 8:
-                    _a = _b, data = _a.data, error = _a.error;
+                    _a = _b, data = _a.data, meta = _a.meta, error = _a.error;
                     if (error) {
                         code = error.code, message = error.message, fields = __rest(error, ["code", "message"]);
                         throw new GobathApiError(code, message, fields);
                     }
-                    if (data.meta) {
-                        data.data.$meta = meta;
+                    if (meta) {
+                        data.$meta = meta;
                     }
-                    return [2 /*return*/, data.data];
+                    return [2 /*return*/, data];
                 case 9: return [4 /*yield*/, resp.text()];
                 case 10: return [2 /*return*/, _c.sent()];
             }
