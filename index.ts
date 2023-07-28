@@ -59,7 +59,11 @@ const GobathApi = PhantomFetcher<Config, Root>(Events, (options, path, body, que
                 throw new GobathApiError(code, message, fields);
             }
 
-            return data;
+            if (data.meta) {
+                data.data.$meta = meta;
+            }
+
+            return data.data;
         } else {
             return await resp.text();
         }

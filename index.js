@@ -157,7 +157,10 @@ var GobathApi = (0, phantomfetcher_1.PhantomFetcher)(Events, function (options, 
                         code = error.code, message = error.message, fields = __rest(error, ["code", "message"]);
                         throw new GobathApiError(code, message, fields);
                     }
-                    return [2 /*return*/, data];
+                    if (data.meta) {
+                        data.data.$meta = meta;
+                    }
+                    return [2 /*return*/, data.data];
                 case 9: return [4 /*yield*/, resp.text()];
                 case 10: return [2 /*return*/, _c.sent()];
             }
