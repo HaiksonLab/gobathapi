@@ -769,12 +769,6 @@ export interface RequisitesIndividualParams {
     inn: string
     /***
      * @description
-     * Individual entrepreneur's OGRNIP.
-     * Required.
-     */
-    ogrnip: string
-    /***
-     * @description
      * Individual entrepreneur's actual address (free format).
      * Leave empty to clone legal address.
      * Optional.
