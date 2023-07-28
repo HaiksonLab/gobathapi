@@ -196,6 +196,10 @@ interface Root<ConfigT = Config> {
     },
     Confirmation: {
         EmailChangeAccess: {
+            GET: NoData<ConfigT, {
+                email: boolean
+                phone: boolean
+            }>
             Email: {
                 GET: NoData<ConfigT, { note: string, code_id: string }>
             }
@@ -204,6 +208,10 @@ interface Root<ConfigT = Config> {
             }
         }
         PhoneChangeAccess: {
+            GET: NoData<ConfigT, {
+                email: boolean
+                phone: boolean
+            }>
             Email: {
                 GET: NoData<ConfigT, { note: string, code_id: string }>
             }
@@ -212,6 +220,10 @@ interface Root<ConfigT = Config> {
             }
         }
         ProfileDeleteAccess: {
+            GET: NoData<ConfigT, {
+                email: boolean
+                phone: boolean
+            }>
             Email: {
                 GET: NoData<ConfigT, { note: string, code_id: string }>
             }
@@ -219,7 +231,47 @@ interface Root<ConfigT = Config> {
                 GET: NoData<ConfigT, { note: string, code_id: string }>
             }
         }
+        BusinessDeleteAccess: {
+            GET: NoData<ConfigT, {
+                email: boolean
+                phone: boolean
+                password: boolean
+            }>
+            Email: {
+                GET: NoData<ConfigT, { note: string, code_id: string }>
+            }
+            Phone: {
+                GET: NoData<ConfigT, { note: string, code_id: string }>
+            }
+            Password: {
+                GET: BodyRe<ConfigT, {
+                        /***
+                         * @description
+                         * The account password of owner.
+                         * Required.
+                         */
+                        password: string,
+                        fields: {
+                            /***
+                             * @description
+                             * ID of the business.
+                             * Required.
+                             */
+                            business_id?: string
+                        }
+                    },
+                    {
+                        note: string,
+                        code_id: string,
+                        code: string
+                    }
+                >
+            }
+        }
         ProfileEmail: {
+            GET: NoData<ConfigT, {
+                email: boolean
+            }>
             Email: {
                 GET: QuerRe<ConfigT,
                     {
@@ -246,6 +298,9 @@ interface Root<ConfigT = Config> {
             }
         }
         ProfilePhone: {
+            GET: NoData<ConfigT, {
+                phone: boolean
+            }>
             Phone: {
                 GET: QuerRe<ConfigT,
                     {
@@ -482,4 +537,312 @@ interface Root<ConfigT = Config> {
             }
         }>
     },
+    Business: {
+        GET: NoData<ConfigT, GetBusinessResponse[]>
+        PATCH: BodyRe<ConfigT,
+            {
+                /***
+                 * @description
+                 * Title for the business (internal show).
+                 * Optional.
+                 */
+                name?: string
+            },
+            {
+                updated: ["name"]
+            }
+        >
+        DELETE: BodyRe<ConfigT,
+            {
+                /***
+                 * @description
+                 * Confirmation code requested with `/confirmation/business-delete-access` and received by owner.
+                 * Required.
+                 */
+                code: string
+            },
+            {
+                note: string
+            }
+        >
+        New: {
+            Legal: {
+                POST: BodyRe<ConfigT, RequisitesLegalParams, { note: string, business_id: number }>
+            }
+            Individual: {
+                POST: BodyRe<ConfigT, RequisitesIndividualParams, { note: string, business_id: number }>
+            }
+            Selfbusy: {
+                POST: BodyRe<ConfigT, RequisitesSelfbusyParams, { note: string, business_id: number }>
+            }
+            Person: {
+                POST: BodyRe<ConfigT, RequisitesPersonParams, { note: string, business_id: number }>
+            }
+        }
+        Requisites: {
+            GET: NoData<ConfigT, GetBusinessResponse>
+            Legal: {
+                PATCH: BodyRe<ConfigT, RequisitesLegalParams, { note: string }>
+            }
+            Individual: {
+                PATCH: BodyRe<ConfigT, RequisitesIndividualParams, { note: string }>
+            }
+            Selfbusy: {
+                PATCH: BodyRe<ConfigT, RequisitesSelfbusyParams, { note: string }>
+            }
+            Person: {
+                PATCH: BodyRe<ConfigT, RequisitesPersonParams, { note: string }>
+            }
+            Bank: {
+                PATCH: BodyRe<ConfigT, RequisitesBankParams, { note: string }>
+            }
+            Contacts: {
+                PATCH: BodyRe<ConfigT, RequisitesContactsParams, { note: string }>
+            }
+        }
+    }
+}
+
+interface GetBusinessResponse {
+    business_id: number,
+    name:        string,
+    requisites:  RequisitesPublicInfo,
+}
+
+interface RequisitesPublicInfo {
+    main: null | {
+        name:         string
+        short_name:   string
+        moderation:   "MODERATING" | "MODERATED" | "DECLINED"
+        type:         "LEGAL" | "INDIVIDUAL" | "SELFBUSY" | "PERSON"
+        legal: null | {
+            inn:          string
+            kpp:          string
+            yur_address:  string
+            fact_address: string
+        },
+        individual: null | {
+            inn:          string
+            ogrnip:       string
+            yur_address:  string
+            fact_address: string
+        },
+        selfbusy: null | {
+            inn:          string
+            reg_address:  string
+        }
+        person: null | {
+            reg_address: string
+            passport:    PersonPassport | null
+        }
+    },
+    bank: null | {
+        name:    string
+        bic:     string
+        cor:     string
+        account: string
+    },
+    contacts: null | {
+        name:    string
+        phone:   string | null
+        email:   string | null
+    },
+}
+
+interface PersonPassport {
+    country:                "RUS"
+    firstname:              string
+    lastname:               string
+    patronymic:             string | null
+    sex:                    "M" | "F"
+    born_date:              string
+    born_place:             string
+    passport_serial:        string
+    passport_number:        string
+    passport_issued_by:     string
+    passport_issued_date:   string
+    passport_division_code: string
+}
+
+interface RequisitesPersonParams {
+    /***
+     * @description
+     * Country code.
+     * Only available variant `RUS`.
+     * Required.
+     */
+    country: "RUS"
+    /***
+     * @description
+     * Firstname (as in the passport).
+     * Required.
+     */
+    firstname: string
+    /***
+     * @description
+     * Lastname (as in the passport).
+     * Required.
+     */
+    lastname: string
+    /***
+     * Patronymic (as in the passport).
+     * Leave empty if has no.
+     * Optional.
+     */
+    patronymic?: string
+    /***
+     * @description
+     * M - male, F - female.
+     * Required.
+     */
+    sex: "F" | "M"
+    /***
+     * @description
+     * Born date `YYYY-MM-DD`.
+     * Required.
+     */
+    born_date: string
+    /***
+     * @description
+     * Born place (as in the passport).
+     * Required.
+     */
+    born_place: string
+    /***
+     * @description
+     * Passport serial (with/out spaces).
+     * Required.
+     */
+    passport_serial: string
+    /***
+     * @description
+     * Passport number (with/out spaces).
+     * Required.
+     */
+    passport_number: string
+    /***
+     * @description
+     * Passport issued by (as in th passport).
+     * Required.
+     */
+    passport_issued_by: string
+    /***
+     * @description
+     * Passport issued date `YYYY-MM-DD`.
+     * Required.
+     */
+    passport_issued_date: string
+    /***
+     * @description
+     * Passport division code (as in passport).
+     * Required.
+     */
+    passport_division_code: string
+    /***
+     * @description
+     * Registration address (free format).
+     * Required.
+     */
+    reg_address: string
+}
+
+interface RequisitesSelfbusyParams {
+    /***
+     * @description
+     * Full name.
+     * Required.
+     */
+    fio: string
+    /***
+     * @description
+     * INN.
+     * Required.
+     */
+    inn: string
+    /***
+     * @description
+     * Registration address (free format).
+     * Required.
+     */
+    reg_address: string
+}
+
+interface RequisitesIndividualParams {
+    /***
+     * @description
+     * Individual entrepreneur's INN.
+     * Required.
+     */
+    inn: string
+    /***
+     * @description
+     * Individual entrepreneur's OGRNIP.
+     * Required.
+     */
+    ogrnip: string
+    /***
+     * @description
+     * Individual entrepreneur's actual address (free format).
+     * Leave empty to clone legal address.
+     * Optional.
+     */
+    fact_address?: string
+}
+
+interface RequisitesLegalParams {
+    /***
+     * @description
+     * Organization INN.
+     * Required.
+     */
+    inn: string
+    /***
+     * @description
+     * Organization KPP.
+     * Required.
+     */
+    kpp: string
+    /***
+     * @description
+     * Organization actual address (free format).
+     * Leave empty to clone legal address.
+     * Optional.
+     */
+    fact_address?: string
+}
+
+interface RequisitesBankParams {
+    /***
+     * @description
+     * The BIC of bank.
+     * Required.
+     */
+    bic: string
+    /***
+     * @description
+     * Personal account number in bank.
+     * Required.
+     */
+    account: string | number
+}
+
+interface RequisitesContactsParams {
+    /***
+     * @description
+     * Name of the contact person.
+     * Required.
+     */
+    name: string
+    /***
+     * @description
+     * Phone of the contact person (e164 format with/out +)
+     * Required - if email not set.
+     */
+    phone?: string
+    /***
+     * @description
+     * Email of the contact person.
+     * Required - if phone not set.
+     */
+    email?: string
 }
