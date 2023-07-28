@@ -560,16 +560,16 @@ interface Root<ConfigT = Config> {
         >
         New: {
             Legal: {
-                POST: BodyRe<ConfigT, RequisitesLegalParams, { note: string, business_id: number }>
+                POST: BodyRe<ConfigT, RequisitesLegalParams & {business_name?: string}, { note: string, business_id: number }>
             }
             Individual: {
-                POST: BodyRe<ConfigT, RequisitesIndividualParams, { note: string, business_id: number }>
+                POST: BodyRe<ConfigT, RequisitesIndividualParams & {business_name?: string}, { note: string, business_id: number }>
             }
             Selfbusy: {
-                POST: BodyRe<ConfigT, RequisitesSelfbusyParams, { note: string, business_id: number }>
+                POST: BodyRe<ConfigT, RequisitesSelfbusyParams & {business_name?: string}, { note: string, business_id: number }>
             }
             Person: {
-                POST: BodyRe<ConfigT, RequisitesPersonParams, { note: string, business_id: number }>
+                POST: BodyRe<ConfigT, RequisitesPersonParams & {business_name?: string}, { note: string, business_id: number }>
             }
         }
         Requisites: {
