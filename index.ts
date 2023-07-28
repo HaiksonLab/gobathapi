@@ -82,6 +82,8 @@ export {
 
 import type {NoData, BodyRe, BodyOp, QuerRe, QuerOp, CplxRe, CplxOp, CplxBR, CplxQR} from "phantomfetcher";
 import FormData from 'form-data';
+import {Profiler} from "inspector";
+import Profile = module
 interface Config {
     token?: string
     preventParallel?: boolean | string
@@ -104,75 +106,88 @@ interface FileWithVariants<VariantsT = string, MetaT = object> {
     created_at: string
     is_temp: boolean
     variants: null | {
-        [key:VariantsT ]: {
-            id: string
-            ext: string
-            mimetype: string
-            url: string
-            size: number
-            meta: MetaT
-            created_at: string
-            is_temp: boolean
-        }
+        [key:VariantsT ]: FileWithVariants
     }
+}
+
+interface AuthMagickLinkParams{
+    /***
+     * @description
+     * in case `phone` will send short confirmation code.
+     * in case `email` will send confirmation link.
+     * Required.
+     */
+    via: "phone" | "email"
+    /***
+     * @description
+     * in case `phone` number must be e164 format (with/out +).
+     * in case `email` address must be email.
+     * Required.
+     */
+    destination: string
+    /***
+     * @description
+     * `registration`   - will throw error if user already exists.
+     * `authorization`  - will throw error if user does not exist.
+     * `password_reset` - will throw error if user does not exist.
+     * Required.
+     */
+    purpose: "registration" | "authorization" | "password_reset"
+    /***
+     * @description
+     * Received confirmation code.
+     */
+    code?: number | string
+}
+
+interface AuthPasswordParams {
+    /***
+     * @description
+     * Phone (e164 format with/out +) or email.
+     * Required.
+     */
+    username: string
+    /***
+     * @description
+     * Password.
+     * Required.
+     */
+    password: string
+}
+
+interface ProfileData {
+    user_id:         number,
+    name:            string,
+    phone:           string | null,
+    email:           string | null,
+    prev_auth_at:    string | null,
+    registered_at:   string,
+
+    has_password:    boolean,
+    has_token:       boolean,
+
+    sso: {
+        telegram:    boolean,
+        vkontakte:   boolean,
+        google:      boolean,
+        yandex:      boolean,
+    },
+
+    avatar: {
+        big:        string,
+        medium:     string,
+        small:      string,
+        thumbnail:  string,
+    } | null
 }
 
 interface Root<ConfigT = Config> {
     Auth: {
         MagickLink: {
-            GET:  CplxQR<ConfigT,
-                null,
-                {
-                    /***
-                     * @description
-                     * in case `phone` will send short confirmation code.
-                     * in case `email` will send confirmation link.
-                     * Required.
-                     */
-                    via: "phone" | "email"
-                    /***
-                     * @description
-                     * in case `phone` number must be e164 format (with/out +).
-                     * in case `email` address must be email.
-                     * Required.
-                     */
-                    destination: string
-                    /***
-                     * @description
-                     * `registration`   - will throw error if user already exists.
-                     * `authorization`  - will throw error if user does not exist.
-                     * `password_reset` - will throw error if user does not exist.
-                     * Required.
-                     */
-                    purpose: "registration" | "authorization" | "password_reset"
-                    /***
-                     * @description
-                     * Received confirmation code.
-                     */
-                    code?: number | string
-                },
-                AuthorizedResponse
-            >
+            GET:  CplxQR<ConfigT, null, AuthMagickLinkParams, AuthorizedResponse>
         }
         Password: {
-            POST: BodyRe<ConfigT,
-                {
-                    /***
-                     * @description
-                     * Phone (e164 format with/out +) or email.
-                     * Required.
-                     */
-                    username: string
-                    /***
-                     * @description
-                     * Password.
-                     * Required.
-                     */
-                    password: string
-                },
-                null,
-                AuthorizedResponse
-            >
+            POST: BodyRe<ConfigT, AuthPasswordParams, null, AuthorizedResponse>
         }
         Telegram: {
             POST: BodyRe<ConfigT,
@@ -353,33 +368,7 @@ interface Root<ConfigT = Config> {
         }
     },
     Profile: {
-        GET:   NoData<ConfigT,
-            {
-                user_id:         number,
-                name:            string,
-                phone:           string | null,
-                email:           string | null,
-                prev_auth_at:    string | null,
-                registered_at:   string,
-
-                has_password:    boolean,
-                has_token:       boolean,
-
-                sso: {
-                    telegram:    boolean,
-                    vkontakte:   boolean,
-                    google:      boolean,
-                    yandex:      boolean,
-                },
-
-                avatar: {
-                    big:        string,
-                    medium:     string,
-                    small:      string,
-                    thumbnail:  string,
-                } | null
-            }
-        >
+        GET:   NoData<ConfigT, ProfileData>
 
         PATCH: BodyRe<ConfigT,
             {
