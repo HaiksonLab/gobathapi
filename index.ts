@@ -597,9 +597,9 @@ interface Root<ConfigT = Config> {
 }
 
 export interface GetBusinessResponse {
-    business_id: number,
-    name:        string,
-    requisites:  RequisitesPublicInfo,
+    id:         number,
+    name:       string,
+    requisites: RequisitesPublicInfo,
 }
 
 export interface RequisitesPublicInfo {

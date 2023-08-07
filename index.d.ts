@@ -534,7 +534,7 @@ interface Root<ConfigT = Config> {
     };
 }
 export interface GetBusinessResponse {
-    business_id: number;
+    id: number;
     name: string;
     requisites: RequisitesPublicInfo;
 }
