@@ -531,6 +531,7 @@ interface Root<ConfigT = Config> {
                 }>;
             };
         };
+        Roles: RolesRouter<ConfigT>;
     };
 }
 export interface GetBusinessResponse {
@@ -557,6 +558,7 @@ export interface RequisitesPublicInfo {
             fact_address: string;
         };
         selfbusy: null | {
+            fio: string;
             inn: string;
             reg_address: string;
         };
@@ -761,4 +763,127 @@ export interface RequisitesContactsParams {
      * Required - if phone not set.
      */
     email?: string;
+}
+export interface RolesRouter<ConfigT> {
+    GET: NoData<ConfigT, RolesAndPermissionsInfo>;
+    POST: BodyRe<ConfigT, {
+        /***
+         * @description
+         * Unique role name ([a-z0-9_]).
+         * Required.
+         */
+        role: string;
+        /***
+         * @description
+         * The title of role.
+         * Optional.
+         */
+        title?: string;
+    }, {
+        note: string;
+    }>;
+    AvailablePermissions: {
+        GET: NoData<ConfigT, GetSupportResponse>;
+    };
+    /**
+     * Role name
+     */
+    [key: string]: {
+        Permissions: {
+            LINK: BodyRe<ConfigT, {
+                /***
+                 * @description
+                 * The permission names.
+                 * Required.
+                 */
+                permissions: string[];
+            }, {
+                note: string;
+            }>;
+            UNLINK: BodyRe<ConfigT, {
+                /***
+                 * @description
+                 * The permission names.
+                 * Required.
+                 */
+                permissions: string[];
+            }, {
+                note: string;
+            }>;
+        };
+        Resources: {
+            /**
+             * Resource type
+             */
+            [key: string]: {
+                Permissions: {
+                    LINK: BodyRe<ConfigT, {
+                        /***
+                         * @description
+                         * The permission names.
+                         * Required.
+                         */
+                        permissions: string[];
+                    }, {
+                        note: string;
+                    }>;
+                    UNLINK: BodyRe<ConfigT, {
+                        /***
+                         * @description
+                         * The permission names.
+                         * Required.
+                         */
+                        permissions: string[];
+                    }, {
+                        note: string;
+                    }>;
+                };
+                /**
+                 * Resource id
+                 */
+                [key: number]: {
+                    Permissions: {
+                        LINK: BodyRe<ConfigT, {
+                            /***
+                             * @description
+                             * The permission names.
+                             * Required.
+                             */
+                            permissions: string[];
+                        }, {
+                            note: string;
+                        }>;
+                        UNLINK: BodyRe<ConfigT, {
+                            /***
+                             * @description
+                             * The permission names.
+                             * Required.
+                             */
+                            permissions: string[];
+                        }, {
+                            note: string;
+                        }>;
+                    };
+                };
+            };
+        };
+    };
+}
+export type RolesAndPermissionsInfo = {
+    role: string;
+    title: string | null;
+    system: boolean;
+    permissions: string[];
+    resources: {
+        type: string;
+        permissions: string[];
+        models: {
+            id: number;
+            permissions: string[];
+        }[];
+    }[];
+}[];
+export interface GetSupportResponse {
+    permissions: string[];
+    resource_permissions: Record<string, string[]>;
 }
