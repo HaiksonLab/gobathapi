@@ -532,6 +532,7 @@ interface Root<ConfigT = Config> {
             };
         };
         Roles: RolesRouter<ConfigT>;
+        Employees: EmployeesRouter<ConfigT>;
     };
 }
 export interface GetBusinessResponse {
@@ -797,6 +798,12 @@ export interface RolesRouter<ConfigT> {
                  * Required.
                  */
                 permissions: string[];
+                /**
+                 * Remove old roles.
+                 * Default `false`.
+                 * Optional.
+                 */
+                delete_olds: boolean;
             }, {
                 note: string;
             }>;
@@ -824,6 +831,12 @@ export interface RolesRouter<ConfigT> {
                          * Required.
                          */
                         permissions: string[];
+                        /**
+                         * Remove old roles.
+                         * Default `false`.
+                         * Optional.
+                         */
+                        delete_olds: boolean;
                     }, {
                         note: string;
                     }>;
@@ -850,6 +863,12 @@ export interface RolesRouter<ConfigT> {
                              * Required.
                              */
                             permissions: string[];
+                            /**
+                             * Remove old roles.
+                             * Default `false`.
+                             * Optional.
+                             */
+                            delete_olds: boolean;
                         }, {
                             note: string;
                         }>;
@@ -866,6 +885,59 @@ export interface RolesRouter<ConfigT> {
                     };
                 };
             };
+        };
+    };
+}
+export interface EmployeesRouter<ConfigT> {
+    GET: NoData<ConfigT, EmployeesList>;
+    AllowInvitation: {
+        POST: BodyRe<ConfigT, {
+            /**
+             * Confirmation code id requested with `/confirmation/business_invitation` and received by employee.
+             * Required.
+             */
+            code_id: string;
+            /**
+             * Confirmation code requested with `/confirmation/business_invitation` and received by employee.
+             * Required.
+             */
+            code: string;
+        }, {
+            note: string;
+        }>;
+    };
+    /**
+     * User id
+     */
+    [key: number]: {
+        DELETE: NoData<ConfigT, {
+            note: string;
+        }>;
+        Roles: {
+            LINK: BodyRe<ConfigT, {
+                /**
+                 * The roles to be assigned to employee.
+                 * Required.
+                 */
+                roles: string[];
+                /**
+                 * Remove old roles.
+                 * Default `false`.
+                 * Optional.
+                 */
+                delete_olds: boolean;
+            }, {
+                note: string;
+            }>;
+            UNLINK: BodyRe<ConfigT, {
+                /**
+                 * The roles to be revoked from the employee.
+                 * Required.
+                 */
+                roles: string[];
+            }, {
+                note: string;
+            }>;
         };
     };
 }
@@ -887,3 +959,9 @@ export interface GetSupportResponse {
     permissions: string[];
     resource_permissions: Record<string, string[]>;
 }
+export type EmployeesList = {
+    user_id: number;
+    name: string;
+    roles: string[];
+    is_owner: boolean;
+}[];
