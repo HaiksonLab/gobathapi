@@ -11,7 +11,7 @@ declare class GobathApiCommunicationError extends GobathApiError {
 }
 declare const GobathApi: import("phantomfetcher").RootConfigurable<Config & import("phantomfetcher").DefaultConfig, Root<Config>>;
 export { Events, GobathApi, GobathApiError, GobathApiLimitError, GobathApiCommunicationError, };
-import type { NoData, BodyRe, QuerRe, QuerOp, CplxQR } from "phantomfetcher";
+import type { NoData, BodyRe, BodyOp, QuerRe, QuerOp, CplxQR } from "phantomfetcher";
 import FormData from 'form-data';
 interface Config {
     token?: string;
@@ -443,7 +443,9 @@ interface Root<ConfigT = Config> {
         }>;
     };
     Business: {
-        GET: NoData<ConfigT, GetBusinessResponse[]>;
+        GET: BodyOp<ConfigT, {
+            include: ["branches"];
+        }, GetBusinessResponse[]>;
         PATCH: BodyRe<ConfigT, {
             /***
              * @description
@@ -539,6 +541,7 @@ export interface GetBusinessResponse {
     id: number;
     name: string;
     requisites: RequisitesPublicInfo;
+    branches: null | BranchPublicInfoExtended;
 }
 export interface RequisitesPublicInfo {
     main: null | {
@@ -579,6 +582,27 @@ export interface RequisitesPublicInfo {
         phone: string | null;
         email: string | null;
     };
+}
+export interface BranchPublicInfoExtended extends BranchPublicInfo {
+    avatar_file_id: null | string;
+    location: null | {
+        address: null | string;
+        coordinates: null | {
+            x: number;
+            y: number;
+        };
+    };
+    worktime: null | any;
+    contacts: null | any;
+}
+export interface BranchPublicInfo {
+    id: number;
+    name: string;
+    type: 'STATIONARY' | 'VIRTUAL' | 'NONE';
+    description_short: string;
+    description: string;
+    business_id: number;
+    created_at: string;
 }
 export interface PersonPassport {
     country: "RUS";

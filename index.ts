@@ -531,7 +531,12 @@ interface Root<ConfigT = Config> {
         }>
     },
     Business: {
-        GET: NoData<ConfigT, GetBusinessResponse[]>
+        GET: BodyOp<ConfigT,
+            {
+                include: ["branches"]
+            },
+            GetBusinessResponse[]
+        >
         PATCH: BodyRe<ConfigT,
             {
                 /***
@@ -602,6 +607,7 @@ export interface GetBusinessResponse {
     id:         number,
     name:       string,
     requisites: RequisitesPublicInfo,
+    branches: null | BranchPublicInfoExtended,
 }
 
 export interface RequisitesPublicInfo {
@@ -643,6 +649,26 @@ export interface RequisitesPublicInfo {
         phone:   string | null
         email:   string | null
     },
+}
+
+export interface BranchPublicInfoExtended extends BranchPublicInfo {
+    avatar_file_id: null | string
+    location: null | {
+        address:     null | string
+        coordinates: null | {x: number, y: number}
+    }
+    worktime: null | any
+    contacts: null | any
+}
+
+export interface BranchPublicInfo {
+    id:                 number
+    name:               string
+    type:               'STATIONARY' | 'VIRTUAL' | 'NONE'
+    description_short:  string
+    description:        string
+    business_id:        number
+    created_at:         string
 }
 
 export interface PersonPassport {
