@@ -531,8 +531,12 @@ interface Root<ConfigT = Config> {
         }>
     },
     Business: {
-        GET: BodyOp<ConfigT,
+        GET: QuerOp<ConfigT,
             {
+                /**
+                 * Include branches list.
+                 * Optional.
+                 */
                 include: ["branches"]
             },
             GetBusinessResponse[]

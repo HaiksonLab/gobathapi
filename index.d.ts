@@ -11,7 +11,7 @@ declare class GobathApiCommunicationError extends GobathApiError {
 }
 declare const GobathApi: import("phantomfetcher").RootConfigurable<Config & import("phantomfetcher").DefaultConfig, Root<Config>>;
 export { Events, GobathApi, GobathApiError, GobathApiLimitError, GobathApiCommunicationError, };
-import type { NoData, BodyRe, BodyOp, QuerRe, QuerOp, CplxQR } from "phantomfetcher";
+import type { NoData, BodyRe, QuerRe, QuerOp, CplxQR } from "phantomfetcher";
 import FormData from 'form-data';
 interface Config {
     token?: string;
@@ -443,7 +443,11 @@ interface Root<ConfigT = Config> {
         }>;
     };
     Business: {
-        GET: BodyOp<ConfigT, {
+        GET: QuerOp<ConfigT, {
+            /**
+             * Include branches list.
+             * Optional.
+             */
             include: ["branches"];
         }, GetBusinessResponse[]>;
         PATCH: BodyRe<ConfigT, {
