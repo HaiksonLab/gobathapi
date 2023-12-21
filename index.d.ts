@@ -10,7 +10,18 @@ declare class GobathApiLimitError extends GobathApiError {
 declare class GobathApiCommunicationError extends GobathApiError {
 }
 declare const GobathApi: import("phantomfetcher").RootConfigurable<Config & import("phantomfetcher").DefaultConfig, Root<Config>>;
-export { Events, GobathApi, GobathApiError, GobathApiLimitError, GobathApiCommunicationError, };
+/**
+ * Load more for GobathApi pagination (without using $meta)
+ * @example:
+ *    LoadMoreDown(this.notifications, 20, vue_infinity_scroll_event.done, async (ol) => {
+ *        return await GobathApi().Notifications.Unread.SEARCH(ol);
+ *    });
+ */
+declare function LoadMoreDown(list: any[], load_by: number, done: (status: "ok" | "empty" | "error") => void, fetch: (pagination: {
+    offset: number;
+    limit: number;
+}) => Promise<any[]>): Promise<void>;
+export { Events, GobathApi, GobathApiError, GobathApiLimitError, GobathApiCommunicationError, LoadMoreDown, };
 import type { NoData, BodyRe, QuerRe, QuerOp, CplxQR } from "phantomfetcher";
 import FormData from 'form-data';
 interface Config {

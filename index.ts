@@ -70,12 +70,50 @@ const GobathApi = PhantomFetcher<Config, Root>(Events, (options, path, body, que
     });
 });
 
+/**
+ * Load more for GobathApi pagination (without using $meta)
+ * @example:
+ *    LoadMoreDown(this.notifications, 20, vue_infinity_scroll_event.done, async (ol) => {
+ *        return await GobathApi().Notifications.Unread.SEARCH(ol);
+ *    });
+ */
+async function LoadMoreDown(list: any[], load_by: number, done: (status: "ok" | "empty" | "error") => void, fetch: (pagination: {offset: number, limit: number}) => Promise<any[]>) {
+    try {
+        const more = await fetch({
+            offset: list.length,
+            limit:  load_by,
+        });
+
+        if (!more.length) {
+            return done('empty');
+        }
+
+        list.push(...more);
+        done('ok');
+    }
+    catch (err) {
+        done('error');
+    }
+
+    /*if (more.length) {
+        list.splice(0, more.length);
+        setTimeout(()=>{
+            list.push(...more);
+            this.last_offset = this.last_offset + more.length;
+            done('ok');
+        }, 10)
+    } else {
+        done('empty');
+    }*/
+}
+
 export {
     Events,
     GobathApi,
     GobathApiError,
     GobathApiLimitError,
     GobathApiCommunicationError,
+    LoadMoreDown,
 }
 
 
