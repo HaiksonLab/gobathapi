@@ -94,7 +94,6 @@ async function LoadMoreDown(list: any[], load_by: number, done: (status: "ok" | 
     catch (err) {
         done('error');
     }
-
     /*if (more.length) {
         list.splice(0, more.length);
         setTimeout(()=>{
