@@ -72,8 +72,8 @@ mime-types@^2.1.12:
     mime-db "1.52.0"
 
 phantomfetcher@HaiksonLab/phantomfetcher:
-  version "1.0.1"
-  resolved "https://codeload.github.com/HaiksonLab/phantomfetcher/tar.gz/c5750d4983c570679f7d91498693ca26f920710d"
+  version "1.0.2"
+  resolved "https://codeload.github.com/HaiksonLab/phantomfetcher/tar.gz/1f69a8dc37094f336d1332fa87081df9f9d393cc"
   dependencies:
     events "^3.3.0"
 
