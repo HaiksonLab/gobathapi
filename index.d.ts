@@ -21,7 +21,18 @@ declare function LoadMoreDown(list: any[], load_by: number, done: (status: "ok" 
     offset: number;
     limit: number;
 }) => Promise<any[]>): Promise<void>;
-export { Events, GobathApi, GobathApiError, GobathApiLimitError, GobathApiCommunicationError, LoadMoreDown, };
+/**
+ * Load more for GobathApi pagination (without using $meta)
+ * @example:
+ *    LoadMoreUp(this.notifications, 20, vue_infinity_scroll_event.done, async (ol) => {
+ *        return await GobathApi().Notifications.Unread.SEARCH(ol);
+ *    });
+ */
+declare function LoadMoreUp(list: any[], load_by: number, done: (status: "ok" | "empty" | "error") => void, fetch: (pagination: {
+    offset: number;
+    limit: number;
+}) => Promise<any[]>): Promise<void>;
+export { Events, GobathApi, GobathApiError, GobathApiLimitError, GobathApiCommunicationError, LoadMoreDown, LoadMoreUp, };
 import type { NoData, BodyRe, QuerRe, QuerOp, CplxQR } from "phantomfetcher";
 import FormData from 'form-data';
 interface Config {

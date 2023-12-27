@@ -23,7 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LoadMoreDown = exports.GobathApiCommunicationError = exports.GobathApiLimitError = exports.GobathApiError = exports.GobathApi = exports.Events = void 0;
+exports.LoadMoreUp = exports.LoadMoreDown = exports.GobathApiCommunicationError = exports.GobathApiLimitError = exports.GobathApiError = exports.GobathApi = exports.Events = void 0;
 //@ts-nocheck
 const phantomfetcher_1 = require("phantomfetcher");
 const axios_1 = __importDefault(require("axios"));
@@ -126,3 +126,29 @@ function LoadMoreDown(list, load_by, done, fetch) {
     });
 }
 exports.LoadMoreDown = LoadMoreDown;
+/**
+ * Load more for GobathApi pagination (without using $meta)
+ * @example:
+ *    LoadMoreUp(this.notifications, 20, vue_infinity_scroll_event.done, async (ol) => {
+ *        return await GobathApi().Notifications.Unread.SEARCH(ol);
+ *    });
+ */
+function LoadMoreUp(list, load_by, done, fetch) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const more = yield fetch({
+                offset: list.length,
+                limit: load_by,
+            });
+            if (!more.length) {
+                return done('empty');
+            }
+            list.unshift(...more);
+            done('ok');
+        }
+        catch (err) {
+            done('error');
+        }
+    });
+}
+exports.LoadMoreUp = LoadMoreUp;
