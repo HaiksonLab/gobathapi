@@ -20,7 +20,7 @@ declare const GobathApi: import("phantomfetcher").RootConfigurable<Config & impo
 declare function LoadMoreDown(list: any[], load_by: number, done: (status: "ok" | "empty" | "error") => void, fetch: (pagination: {
     offset: number;
     limit: number;
-}, apply_if?: () => boolean) => Promise<any[]>): Promise<void>;
+}) => Promise<any[]>, apply_if?: () => boolean): Promise<void>;
 /**
  * Load more for GobathApi pagination (without using $meta)
  * @example:

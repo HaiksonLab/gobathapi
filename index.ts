@@ -77,7 +77,7 @@ const GobathApi = PhantomFetcher<Config, Root>(Events, (options, path, body, que
  *        return await GobathApi().Notifications.Unread.SEARCH(ol);
  *    });
  */
-async function LoadMoreDown(list: any[], load_by: number, done: (status: "ok" | "empty" | "error") => void, fetch: (pagination: {offset: number, limit: number}, apply_if?: () => boolean) => Promise<any[]>) {
+async function LoadMoreDown(list: any[], load_by: number, done: (status: "ok" | "empty" | "error") => void, fetch: (pagination: {offset: number, limit: number}) => Promise<any[]>, apply_if?: () => boolean) {
     try {
         const more = await fetch({
             offset: list.length,

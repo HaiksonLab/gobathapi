@@ -97,7 +97,7 @@ exports.GobathApi = GobathApi;
  *        return await GobathApi().Notifications.Unread.SEARCH(ol);
  *    });
  */
-function LoadMoreDown(list, load_by, done, fetch) {
+function LoadMoreDown(list, load_by, done, fetch, apply_if) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const more = yield fetch({
