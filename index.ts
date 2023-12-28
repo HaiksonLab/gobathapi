@@ -77,7 +77,7 @@ const GobathApi = PhantomFetcher<Config, Root>(Events, (options, path, body, que
  *        return await GobathApi().Notifications.Unread.SEARCH(ol);
  *    });
  */
-async function LoadMoreDown(list: any[], load_by: number, done: (status: "ok" | "empty" | "error") => void, fetch: (pagination: {offset: number, limit: number}) => Promise<any[]>) {
+async function LoadMoreDown(list: any[], load_by: number, done: (status: "ok" | "empty" | "error") => void, fetch: (pagination: {offset: number, limit: number}, apply_if?: () => boolean) => Promise<any[]>) {
     try {
         const more = await fetch({
             offset: list.length,
@@ -88,7 +88,9 @@ async function LoadMoreDown(list: any[], load_by: number, done: (status: "ok" | 
             return done('empty');
         }
 
-        list.push(...more);
+        if (!apply_if || apply_if()) {
+            list.push(...more);
+        }
         done('ok');
     }
     catch (err) {
@@ -113,7 +115,7 @@ async function LoadMoreDown(list: any[], load_by: number, done: (status: "ok" | 
  *        return await GobathApi().Notifications.Unread.SEARCH(ol);
  *    });
  */
-async function LoadMoreUp(list: any[], load_by: number, done: (status: "ok" | "empty" | "error") => void, fetch: (pagination: {offset: number, limit: number}) => Promise<any[]>) {
+async function LoadMoreUp(list: any[], load_by: number, done: (status: "ok" | "empty" | "error") => void, fetch: (pagination: {offset: number, limit: number}) => Promise<any[]>, apply_if?: () => boolean) {
     try {
         const more = await fetch({
             offset: list.length,
@@ -124,7 +126,9 @@ async function LoadMoreUp(list: any[], load_by: number, done: (status: "ok" | "e
             return done('empty');
         }
 
-        list.unshift(...more);
+        if (!apply_if || apply_if()) {
+            list.unshift(...more);
+        }
         done('ok');
     }
     catch (err) {

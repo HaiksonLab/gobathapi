@@ -20,7 +20,7 @@ declare const GobathApi: import("phantomfetcher").RootConfigurable<Config & impo
 declare function LoadMoreDown(list: any[], load_by: number, done: (status: "ok" | "empty" | "error") => void, fetch: (pagination: {
     offset: number;
     limit: number;
-}) => Promise<any[]>): Promise<void>;
+}, apply_if?: () => boolean) => Promise<any[]>): Promise<void>;
 /**
  * Load more for GobathApi pagination (without using $meta)
  * @example:
@@ -31,7 +31,7 @@ declare function LoadMoreDown(list: any[], load_by: number, done: (status: "ok" 
 declare function LoadMoreUp(list: any[], load_by: number, done: (status: "ok" | "empty" | "error") => void, fetch: (pagination: {
     offset: number;
     limit: number;
-}) => Promise<any[]>): Promise<void>;
+}) => Promise<any[]>, apply_if?: () => boolean): Promise<void>;
 export { Events, GobathApi, GobathApiError, GobathApiLimitError, GobathApiCommunicationError, LoadMoreDown, LoadMoreUp, };
 import type { NoData, BodyRe, QuerRe, QuerOp, CplxQR } from "phantomfetcher";
 import FormData from 'form-data';

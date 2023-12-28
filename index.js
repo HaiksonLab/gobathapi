@@ -107,7 +107,9 @@ function LoadMoreDown(list, load_by, done, fetch) {
             if (!more.length) {
                 return done('empty');
             }
-            list.push(...more);
+            if (!apply_if || apply_if()) {
+                list.push(...more);
+            }
             done('ok');
         }
         catch (err) {
@@ -133,7 +135,7 @@ exports.LoadMoreDown = LoadMoreDown;
  *        return await GobathApi().Notifications.Unread.SEARCH(ol);
  *    });
  */
-function LoadMoreUp(list, load_by, done, fetch) {
+function LoadMoreUp(list, load_by, done, fetch, apply_if) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const more = yield fetch({
@@ -143,7 +145,9 @@ function LoadMoreUp(list, load_by, done, fetch) {
             if (!more.length) {
                 return done('empty');
             }
-            list.unshift(...more);
+            if (!apply_if || apply_if()) {
+                list.unshift(...more);
+            }
             done('ok');
         }
         catch (err) {
